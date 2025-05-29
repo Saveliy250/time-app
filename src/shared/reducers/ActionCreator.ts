@@ -18,3 +18,18 @@ export const registerUser = (user: IUser) => createAsyncThunk(
         }
     }
 )
+
+export const loginUser = (user: IUser) => createAsyncThunk(
+    'loginUser',
+    async (_, thunkAPI) => {
+        try {
+            const response = await axios.post('https://73a95a8fb71c882b.mokky.dev/auth', {
+                email: user.email,
+                password: user.password,
+            })
+            return response.data;
+        } catch {
+            return thunkAPI.rejectWithValue('не удалось войти')
+        }
+    }
+)

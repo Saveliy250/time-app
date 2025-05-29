@@ -1,13 +1,13 @@
+import {type FC, useState} from 'react';
 import {Button, TextInput} from "@mantine/core";
-import {type FC, useState} from "react";
 import {useForm} from "@mantine/form";
-import {Link} from "react-router-dom";
 
-const Login: FC = () => {
+const Register: FC = () => {
 
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
+            name: '',
             email: '',
             password: '',
         },
@@ -18,6 +18,12 @@ const Login: FC = () => {
     return (
         <>
             <form onSubmit={form.onSubmit(setSubmittedValues)}>
+                <TextInput
+                    label="Name"
+                    placeholder="Name"
+                    key={form.key('name')}
+                    {...form.getInputProps('name')}
+                />
                 <TextInput
                     label="Email"
                     placeholder="Email"
@@ -33,13 +39,12 @@ const Login: FC = () => {
                 />
 
                 <Button type={"submit"}>
-                    Login
+                    Зарегистрироваться
                 </Button>
-                <Link to={'/register'}>Регистрация</Link>
 
             </form>
         </>
     );
 };
 
-export default Login;
+export default Register;
