@@ -1,13 +1,14 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import axios from "axios";
-import type {IUser} from "../models/IUser.ts";
+import type {IUser} from "../../models/IUser.ts";
+import type {IAuthResponse} from "../../models/IResponses.ts";
+import {httpClient} from "../../api/httpClient.ts";
 
 
-export const registerUser = (user: IUser) => createAsyncThunk(
+export const registerUser =  createAsyncThunk<IAuthResponse, IUser>(
     'registerUser',
-    async (_, thunkAPI) => {
+    async (user, thunkAPI) => {
         try {
-            const response = await axios.post('https://73a95a8fb71c882b.mokky.dev/register', {
+            const response = await httpClient.post('/register', {
                 name: user.name,
                 email: user.email,
                 password: user.password,
@@ -19,11 +20,11 @@ export const registerUser = (user: IUser) => createAsyncThunk(
     }
 )
 
-export const loginUser = (user: IUser) => createAsyncThunk(
+export const loginUser = createAsyncThunk<IAuthResponse, IUser>(
     'loginUser',
-    async (_, thunkAPI) => {
+    async (user, thunkAPI) => {
         try {
-            const response = await axios.post('https://73a95a8fb71c882b.mokky.dev/auth', {
+            const response = await httpClient.post('/auth', {
                 email: user.email,
                 password: user.password,
             })

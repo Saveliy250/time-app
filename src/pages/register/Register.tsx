@@ -1,50 +1,47 @@
-import {type FC, useState} from 'react';
 import {Button, TextInput} from "@mantine/core";
-import {useForm} from "@mantine/form";
+import {type SubmitHandler, useForm} from "react-hook-form";
+import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.ts";
+import type {IUser} from "../../shared/models/IUser.ts";
+import {registerUser} from "../../shared/store/reducers/ActionCreator.ts";
 
-const Register: FC = () => {
+export const Register = () => {
 
-    const form = useForm({
-        mode: 'uncontrolled',
-        initialValues: {
-            name: '',
-            email: '',
-            password: '',
-        },
-    });
+    const {register, handleSubmit, formState: {errors}} = useForm<IUser>()
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null)
+    const dispatch = useAppDispatch()
+    const {error, loading , token} = useAppSelector(state => state.user)
 
+    const onSubmit: SubmitHandler<IUser> = (data) => {
+        dispatch(registerUser(data))
+        console.log(token)
+    }
     return (
         <>
-            <form onSubmit={form.onSubmit(setSubmittedValues)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <TextInput
                     label="Name"
                     placeholder="Name"
-                    key={form.key('name')}
-                    {...form.getInputProps('name')}
+                    {...register('name', {required: true})}
                 />
                 <TextInput
                     label="Email"
                     placeholder="Email"
-                    key={form.key('email')}
-                    {...form.getInputProps('email')}
+                    {...register('email')}
                 />
                 <TextInput
                     mt="md"
                     label="Password"
                     placeholder="Password"
-                    key={form.key('password')}
-                    {...form.getInputProps('password')}
+                    {...register('password')}
                 />
-
-                <Button type={"submit"}>
+                {errors.name && <span>{error}</span>}
+                <Button type={"submit"} loading={loading}>
                     Зарегистрироваться
                 </Button>
-
             </form>
+            <Button onClick={() => {
+                localStorage.removeItem('token')
+            }}>Reset token</Button>
         </>
     );
 };
-
-export default Register;

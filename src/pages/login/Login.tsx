@@ -1,45 +1,44 @@
 import {Button, TextInput} from "@mantine/core";
-import {type FC, useState} from "react";
-import {useForm} from "@mantine/form";
 import {Link} from "react-router-dom";
+import {type SubmitHandler, useForm} from "react-hook-form";
+import type {IUser} from "../../shared/models/IUser.ts";
+import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.ts";
+import {loginUser} from "../../shared/store/reducers/ActionCreator.ts";
+import {ROUTES} from "../../shared/routes.ts";
 
-const Login: FC = () => {
+export const Login = () => {
 
-    const form = useForm({
-        mode: 'uncontrolled',
-        initialValues: {
-            email: '',
-            password: '',
-        },
-    });
+    const {register, handleSubmit, formState: {errors}} = useForm<IUser>()
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null)
+    const dispatch = useAppDispatch()
+    const {loading, error} = useAppSelector(state => state.user)
+
+    const onSubmit: SubmitHandler<IUser> = (data) => {
+        dispatch(loginUser(data))
+    }
 
     return (
         <>
-            <form onSubmit={form.onSubmit(setSubmittedValues)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <TextInput
                     label="Email"
                     placeholder="Email"
-                    key={form.key('email')}
-                    {...form.getInputProps('email')}
+                    {...register('email', {required: true})}
                 />
                 <TextInput
                     mt="md"
                     label="Password"
                     placeholder="Password"
-                    key={form.key('password')}
-                    {...form.getInputProps('password')}
+                    {...register('password', {required: true})}
                 />
 
-                <Button type={"submit"}>
+                <Button type={"submit"} loading={loading}>
                     Login
                 </Button>
-                <Link to={'/register'}>Регистрация</Link>
+                {errors.email && <span>{error}</span>}
+                <Link to={ROUTES.REGISTRATION}>Регистрация</Link>
 
             </form>
         </>
     );
 };
-
-export default Login;
