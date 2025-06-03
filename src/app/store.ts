@@ -1,8 +1,10 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {userReducer} from "../shared/store/reducers/UserSlice.ts";
+import {projectReducer} from "../shared/store/reducers/ProjectSlice.ts";
 
 const rootReducer = combineReducers({
     user: userReducer,
+    project: projectReducer,
 })
 
 export const setUpStore = () => {
