@@ -3,12 +3,14 @@ import {Login} from "../pages/login/Login.tsx";
 import "./App.css"
 import {Register} from "../pages/register/Register.tsx";
 import {ROUTES} from "../shared/routes.ts";
+import {MainPage} from "../pages/main/MainPage.tsx";
 
 export function App() {
 
     return (
         <BrowserRouter>
             <Routes>
+                <Route path={ROUTES.MAIN} element={<MainPage/>}/>
                 <Route path={ROUTES.LOGIN} element={<Login/>}/>
                 <Route path={ROUTES.REGISTRATION} element={<Register/>}/>
             </Routes>

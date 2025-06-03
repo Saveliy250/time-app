@@ -1,6 +1,6 @@
 import type {IUser} from "../../models/IUser.ts";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {registerUser} from "./ActionCreator.ts";
+import {loginUser, registerUser} from "./ActionCreator.ts";
 import type {IAuthResponse} from "../../models/IResponses.ts";
 
 
@@ -38,6 +38,21 @@ export const userSlice = createSlice({
                 state.loading = false
                 state.error =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false
+                state.error =
+                    typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
+            })
+            .addCase(loginUser.pending, state => {
+                state.loading = true
+                state.error = ''
+            })
+            .addCase(loginUser.fulfilled, (state, action: PayloadAction<IAuthResponse>) => {
+                state.loading = false;
+                state.user = action.payload.data;
+                state.token = action.payload.token;
+                localStorage.setItem("token", action.payload.token);
             })
     }
 })
