@@ -1,16 +1,16 @@
-import type {IProject} from "../../models/IProject.ts";
+import type {IProject} from "./IProject.ts";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {getProjects, postProject} from "./ActionCreator.ts";
+import {getProjects, postProject} from "../../shared/store/ActionCreator.ts";
 
 interface ProjectsState {
-    projects: IProject[] | [];
-    loading: boolean | null;
+    projects: IProject[];
+    loading: boolean;
     error: string;
 }
 
 const initialState: ProjectsState = {
     projects: [],
-    loading: null,
+    loading: false,
     error: ''
 }
 

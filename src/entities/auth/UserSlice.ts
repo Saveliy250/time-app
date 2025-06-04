@@ -1,7 +1,7 @@
-import type {IUser} from "../../models/IUser.ts";
+import type {IUser} from "./IUser.ts";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {loginUser, registerUser} from "./ActionCreator.ts";
-import type {IAuthResponse} from "../../models/IResponses.ts";
+import {loginUser, registerUser} from "../../shared/store/ActionCreator.ts";
+import type {IAuthResponse} from "../../shared/models/IResponses.ts";
 
 
 interface UserState {

@@ -1,10 +1,9 @@
-import React from 'react';
-import {ProjectList} from "./components/ProjectList.tsx";
+import {CreateProject} from "./components/createProject/CreateProject.tsx";
 
 export const MainPage = () => {
     return (
         <>
-            <ProjectList/>
+            <CreateProject/>
         </>
     );
 };

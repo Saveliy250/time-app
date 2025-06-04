@@ -1,8 +1,9 @@
 import {Button, TextInput} from "@mantine/core";
 import {type SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.ts";
-import type {IUser} from "../../shared/models/IUser.ts";
-import {registerUser} from "../../shared/store/reducers/ActionCreator.ts";
+import type {IUser} from "../../entities/auth/IUser.ts";
+import {registerUser} from "../../shared/store/ActionCreator.ts";
+import {Link} from "react-router-dom";
 
 export const Register = () => {
 
@@ -39,9 +40,7 @@ export const Register = () => {
                     Зарегистрироваться
                 </Button>
             </form>
-            <Button onClick={() => {
-                localStorage.removeItem('token')
-            }}>Reset token</Button>
+            <Link to={'/login'}>Войти</Link>
         </>
     );
 };

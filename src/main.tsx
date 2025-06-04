@@ -3,6 +3,7 @@ import {App} from './app/App.tsx'
 import {MantineProvider} from "@mantine/core";
 import {Provider} from "react-redux";
 import {setUpStore} from "./app/store.ts";
+import '@mantine/core/styles.css';
 
 const store = setUpStore()
 

@@ -1,10 +1,11 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import type {IUser} from "../../models/IUser.ts";
-import type {IAuthResponse} from "../../models/IResponses.ts";
-import {authRepository} from "../../api/AuthRepository.ts";
-import type {IProject} from "../../models/IProject.ts";
-import {projectRepository} from "../../api/ProjectRepository.ts";
+import type {IUser} from "../../entities/auth/IUser.ts";
+import type {IAuthResponse} from "../models/IResponses.ts";
+import {authRepository} from "../../entities/auth/AuthRepository.ts";
+import type {IProject} from "../../entities/project/IProject.ts";
+import {projectRepository} from "../../entities/project/ProjectRepository.ts";
 
+const token = localStorage.getItem("token");
 
 export const registerUser =  createAsyncThunk<IAuthResponse, IUser>(
     'registerUser',
@@ -45,7 +46,13 @@ export const getProjects = createAsyncThunk<IProject[]>(
     'getProjects',
     async (_, thunkAPI) => {
         try {
-            const response = await projectRepository.getAllProjects({})
+            const response = await projectRepository.getAllProjects({
+                config: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
+            })
             return response.data;
         } catch {
             return thunkAPI.rejectWithValue('ошибка в получении проектов')
@@ -62,6 +69,11 @@ export const postProject = createAsyncThunk<IProject, Omit<IProject, 'id'>>(
                     title: project.title,
                     description: project.description,
                     tags: project.tags,
+                },
+                config: {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
                 }
             })
             return response.data;
