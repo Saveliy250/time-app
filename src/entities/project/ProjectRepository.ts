@@ -1,5 +1,5 @@
-import type {AxiosRequestConfig} from "../../shared/models/AxiosRequestConfig.ts";
-import {httpClient} from "../../shared/api/httpClient.ts";
+import type {AxiosRequestConfig} from "shared/models/AxiosRequestConfig.ts";
+import {httpClient} from "shared/api/httpClient.ts";
 import type {IProject} from "./IProject.ts";
 
 class ProjectRepository {

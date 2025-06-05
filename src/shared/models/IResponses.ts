@@ -1,4 +1,4 @@
-import type {IUser} from "../../entities/auth/IUser.ts";
+import type {IUser} from "entities/user/IUser.ts";
 
 export interface IAuthResponse {
     token: string,

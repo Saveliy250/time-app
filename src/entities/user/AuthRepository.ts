@@ -1,6 +1,6 @@
-import {httpClient} from "../../shared/api/httpClient.ts";
+import {httpClient} from "shared/api/httpClient.ts";
 import type {IUser} from "./IUser.ts";
-import type {AxiosRequestConfig} from "../../shared/models/AxiosRequestConfig.ts";
+import type {AxiosRequestConfig} from "shared/models/AxiosRequestConfig.ts";
 
 class AuthRepository {
     registerUser({params, config} : AxiosRequestConfig<Omit<IUser, 'id'>>) {

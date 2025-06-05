@@ -1,8 +1,9 @@
 import {Controller, type SubmitHandler, useForm} from "react-hook-form";
-import type {IProject} from "../../../../entities/project/IProject.ts";
-import {useAppDispatch, useAppSelector} from "../../../../shared/hooks/redux.ts";
+import type {IProject} from "entities/project/IProject.ts";
 import {Button, TagsInput, TextInput} from "@mantine/core";
-import {postProject} from "../../../../shared/store/ActionCreator.ts";
+import classes from "./CreateProject.module.css";
+import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
+import {addProject} from "entities/project/ProjectSlice.ts";
 
 export const CreateProject = () => {
 
@@ -15,20 +16,16 @@ export const CreateProject = () => {
     })
 
     const dispatch = useAppDispatch()
-    const {loading, error} = useAppSelector(state => state.project)
+    const {isLoading, isError} = useAppSelector(state => state.project)
 
     const onSubmit: SubmitHandler<IProject> = (data) => {
-        dispatch(postProject(data))
+        dispatch(addProject(data))
     }
 
     return (
-        <div style={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            width: "33%"
-        }}>
+        <div className={classes.createProjectContainer}>
             <h1>Создать проект</h1>
+            <h3>{isError}</h3>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextInput
                     label={'Название проекта'}
@@ -54,11 +51,11 @@ export const CreateProject = () => {
                         />
                     )}
                 />
-                {errors.title && <span>{error}</span>}
-                <Button type={"submit"} loading={loading} style={{margin: 8, marginLeft: 0}}>
+                {errors.title && <span>{isError}</span>}
+                <Button type={"submit"} loading={isLoading} style={{margin: 8, marginLeft: 0}}>
                     Создать
                 </Button>
-                <Button type={'reset'} loading={loading}>
+                <Button type={'reset'} loading={isLoading}>
                     Отмена
                 </Button>
             </form>
