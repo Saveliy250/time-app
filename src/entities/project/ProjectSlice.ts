@@ -1,17 +1,61 @@
 import type {IProject} from "./IProject.ts";
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {getProjects, postProject} from "../../shared/store/ActionCreator.ts";
+import {createAsyncThunk, createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import {projectRepository} from "entities/project/ProjectRepository.ts";
+
+const token = localStorage.getItem("token");
+
+
+export const getProjects = createAsyncThunk<IProject[]>(
+    'getProjects',
+    async (_, thunkAPI) => {
+        try {
+            const response = await projectRepository.getAllProjects({
+                config: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
+            })
+            return response.data;
+        } catch {
+            return thunkAPI.rejectWithValue('ошибка в получении проектов')
+        }
+    }
+)
+
+export const addProject = createAsyncThunk<IProject, Omit<IProject, 'id'>>(
+    'postProject',
+    async (project, thunkAPI) => {
+        try {
+            const response = await projectRepository.postProject({
+                params: {
+                    title: project.title,
+                    description: project.description,
+                    tags: project.tags,
+                },
+                config: {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            })
+            return response.data;
+        } catch {
+            return thunkAPI.rejectWithValue('ошибка при создании проекта')
+        }
+    }
+)
 
 interface ProjectsState {
     projects: IProject[];
-    loading: boolean;
-    error: string;
+    isLoading: boolean;
+    isError: string;
 }
 
 const initialState: ProjectsState = {
     projects: [],
-    loading: false,
-    error: ''
+    isLoading: false,
+    isError: ''
 }
 
 export const projectSlice = createSlice({
@@ -21,27 +65,27 @@ export const projectSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getProjects.pending, state => {
-                state.loading = true
+                state.isLoading = true
             })
             .addCase(getProjects.fulfilled, (state, action: PayloadAction<IProject[]>) => {
-                state.loading = false
+                state.isLoading = false
                 state.projects = action.payload;
             })
             .addCase(getProjects.rejected, (state, action) => {
-                state.loading = false;
-                state.error =
+                state.isLoading = false;
+                state.isError =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
             })
-            .addCase(postProject.pending, state => {
-                state.loading = true
+            .addCase(addProject.pending, state => {
+                state.isLoading = true
             })
-            .addCase(postProject.fulfilled, (state, action: PayloadAction<IProject>) => {
-                state.loading = false
+            .addCase(addProject.fulfilled, (state, action: PayloadAction<IProject>) => {
+                state.isLoading = false
                 state.projects.push(action.payload)
             })
-            .addCase(postProject.rejected, (state, action) => {
-                state.loading = false;
-                state.error =
+            .addCase(addProject.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
             })
     }

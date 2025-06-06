@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {userReducer} from "../entities/auth/UserSlice.ts";
+import {userReducer} from "../entities/user/UserSlice.ts";
 import {projectReducer} from "../entities/project/ProjectSlice.ts";
 
 const rootReducer = combineReducers({

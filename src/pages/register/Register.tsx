@@ -1,20 +1,19 @@
 import {Button, TextInput} from "@mantine/core";
 import {type SubmitHandler, useForm} from "react-hook-form";
-import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.ts";
-import type {IUser} from "../../entities/auth/IUser.ts";
-import {registerUser} from "../../shared/store/ActionCreator.ts";
+import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
+import type {IUser} from "entities/user/IUser.ts";
 import {Link} from "react-router-dom";
+import {registerUser} from "entities/user/UserSlice.ts";
 
 export const Register = () => {
 
     const {register, handleSubmit, formState: {errors}} = useForm<IUser>()
 
     const dispatch = useAppDispatch()
-    const {error, loading , token} = useAppSelector(state => state.user)
+    const {isError, isLoading} = useAppSelector(state => state.user)
 
     const onSubmit: SubmitHandler<IUser> = (data) => {
         dispatch(registerUser(data))
-        console.log(token)
     }
     return (
         <>
@@ -35,8 +34,8 @@ export const Register = () => {
                     placeholder="Password"
                     {...register('password')}
                 />
-                {errors.name && <span>{error}</span>}
-                <Button type={"submit"} loading={loading}>
+                {errors.name && <span>{isError}</span>}
+                <Button type={"submit"} loading={isLoading}>
                     Зарегистрироваться
                 </Button>
             </form>
