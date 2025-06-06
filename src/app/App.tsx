@@ -4,6 +4,7 @@ import "./App.css"
 import {Register} from "../pages/register/Register.tsx";
 import {ROUTES} from "../shared/routes.ts";
 import {MainPage} from "../pages/main/MainPage.tsx";
+import {AnalyticsPage} from "pages/Analytics/AnalyticsPage.tsx";
 
 export function App() {
 
@@ -13,6 +14,7 @@ export function App() {
                 <Route path={ROUTES.MAIN} element={<MainPage/>}/>
                 <Route path={ROUTES.LOGIN} element={<Login/>}/>
                 <Route path={ROUTES.REGISTRATION} element={<Register/>}/>
+                <Route path={ROUTES.ANALYTICS} element={<AnalyticsPage/>}/>
             </Routes>
         </BrowserRouter>
     )

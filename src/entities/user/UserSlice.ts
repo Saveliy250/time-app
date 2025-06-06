@@ -44,14 +44,16 @@ interface UserState {
     user: IUser | null,
     token: string | null,
     isLoading: boolean,
-    isError: string,
+    isError: boolean,
+    error: string
 }
 
 const initialState: UserState = {
     user: null,
     token: null,
     isLoading: false,
-    isError: ''
+    isError: false,
+    error: '',
 }
 
 export const userSlice = createSlice({
@@ -62,7 +64,7 @@ export const userSlice = createSlice({
         builder
             .addCase(registerUser.pending, (state) => {
                 state.isLoading = true
-                state.isError = ''
+                state.isError = false
             })
             .addCase(registerUser.fulfilled, (state, action: PayloadAction<IAuthResponse>) => {
                 state.isLoading = false
@@ -72,17 +74,19 @@ export const userSlice = createSlice({
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.isLoading = false
-                state.isError =
+                state.isError = true
+                state.error =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false
-                state.isError =
+                state.isError = true
+                state.error =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
             })
             .addCase(loginUser.pending, state => {
                 state.isLoading = true
-                state.isError = ''
+                state.isError = false
             })
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<IAuthResponse>) => {
                 state.isLoading = false;

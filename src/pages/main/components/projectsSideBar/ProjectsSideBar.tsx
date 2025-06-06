@@ -2,10 +2,15 @@ import {AppShell, Button, Skeleton} from "@mantine/core";
 import {Header} from "shared/ui/Header.tsx";
 import classes from "./ProjectsSideBar.module.css";
 import {useGetProjects} from "entities/project/useGetProjects.ts";
+import {useAppDispatch} from "shared/hooks/redux.ts";
+import {setChosenProject} from "entities/project/ProjectSlice.ts";
+import {List} from "shared/ui/List.tsx";
 
 export const ProjectsSideBar = () => {
 
-    const {projects, isLoading, isError} = useGetProjects()
+    const dispatch = useAppDispatch();
+    const {projects, isLoading} = useGetProjects()
+
 
     return (
         <AppShell
@@ -18,8 +23,6 @@ export const ProjectsSideBar = () => {
         >
             <Header />
             <AppShell.Navbar p="md">
-                Navbar
-                <p>{isError}</p>
                 {isLoading &&
                     Array(15)
                     .fill(0)
@@ -27,12 +30,16 @@ export const ProjectsSideBar = () => {
                         <Skeleton key={index} h={28} mt="sm" animate={true} />
                     ))}
                 {!isLoading &&
-                    projects.map((project) => (
+                    <List data={projects} renderData={(project) => (
                         <Button
                             key={project.id}
+                            color={'grey'}
                             className={classes.projectMiniCard}
+                            onClick={() => {
+                                dispatch(setChosenProject(project));
+                            }}
                         >{project.title}</Button>
-                    ))
+                    )}/>
                 }
             </AppShell.Navbar>
         </AppShell>

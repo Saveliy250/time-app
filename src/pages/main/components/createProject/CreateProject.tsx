@@ -4,6 +4,7 @@ import {Button, TagsInput, TextInput} from "@mantine/core";
 import classes from "./CreateProject.module.css";
 import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
 import {addProject} from "entities/project/ProjectSlice.ts";
+import {notifications} from "@mantine/notifications";
 
 export const CreateProject = () => {
 
@@ -16,16 +17,25 @@ export const CreateProject = () => {
     })
 
     const dispatch = useAppDispatch()
-    const {isLoading, isError} = useAppSelector(state => state.project)
+    const {isLoading, isError, error} = useAppSelector(state => state.project)
 
-    const onSubmit: SubmitHandler<IProject> = (data) => {
-        dispatch(addProject(data))
+    const onSubmit: SubmitHandler<IProject> = async (data) => {
+        try{
+            await dispatch(addProject(data)).unwrap()
+        } catch {
+            notifications.show({
+                color: 'red',
+                title: 'Something went wrong :( ',
+                message: error,
+            })
+        }
     }
+
 
     return (
         <div className={classes.createProjectContainer}>
             <h1>Создать проект</h1>
-            <h3>{isError}</h3>
+            {isError && <h3>{error}</h3>}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextInput
                     label={'Название проекта'}
