@@ -4,20 +4,32 @@ import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
 import type {IUser} from "entities/user/IUser.ts";
 import {Link} from "react-router-dom";
 import {registerUser} from "entities/user/UserSlice.ts";
+import {notifications} from "@mantine/notifications";
+import classes from "./Register.module.css";
 
 export const Register = () => {
 
-    const {register, handleSubmit, formState: {errors}} = useForm<IUser>()
+    const {register, handleSubmit} = useForm<IUser>()
 
     const dispatch = useAppDispatch()
-    const {isError, isLoading} = useAppSelector(state => state.user)
+    const { isLoading, error} = useAppSelector(state => state.user)
 
-    const onSubmit: SubmitHandler<IUser> = (data) => {
-        dispatch(registerUser(data))
+    const onSubmit: SubmitHandler<IUser> = async (data) => {
+        try {
+            await dispatch(registerUser(data)).unwrap()
+        } catch {
+            notifications.show({
+                color: 'red',
+                title: 'Something went wrong :( ',
+                message: error,
+            })
+        }
     }
+
+
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={classes.registerFormWrapper}>
+            <form onSubmit={handleSubmit(onSubmit)} >
                 <TextInput
                     label="Name"
                     placeholder="Name"
@@ -34,12 +46,11 @@ export const Register = () => {
                     placeholder="Password"
                     {...register('password')}
                 />
-                {errors.name && <span>{isError}</span>}
                 <Button type={"submit"} loading={isLoading}>
                     Зарегистрироваться
                 </Button>
             </form>
             <Link to={'/login'}>Войти</Link>
-        </>
+        </div>
     );
 };

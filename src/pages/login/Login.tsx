@@ -5,21 +5,32 @@ import type {IUser} from "entities/user/IUser.ts";
 import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
 import {ROUTES} from "shared/routes.ts";
 import {loginUser} from "entities/user/UserSlice.ts";
+import {notifications} from "@mantine/notifications";
+import classes from "./Login.module.css";
 
 export const Login = () => {
 
     const {register, handleSubmit, formState: {errors}} = useForm<IUser>()
 
     const dispatch = useAppDispatch()
-    const {isLoading, isError} = useAppSelector(state => state.user)
+    const {isLoading, error} = useAppSelector(state => state.user)
 
-    const onSubmit: SubmitHandler<IUser> = (data) => {
-        dispatch(loginUser(data))
+    const onSubmit: SubmitHandler<IUser> = async (data) => {
+        try {
+            await dispatch(loginUser(data)).unwrap()
+        } catch {
+            notifications.show({
+                color: 'red',
+                title: 'Something went wrong :( ',
+                message: error,
+            })
+        }
     }
+
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} className={classes.formWrapper}>
                 <TextInput
                     label="Email"
                     placeholder="Email"
@@ -35,7 +46,7 @@ export const Login = () => {
                 <Button type={"submit"} loading={isLoading}>
                     Login
                 </Button>
-                {errors.email && <span>{isError}</span>}
+                {errors.email && <span>{error}</span>}
                 <Link to={ROUTES.REGISTRATION}>Регистрация</Link>
 
             </form>

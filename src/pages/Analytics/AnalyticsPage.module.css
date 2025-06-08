@@ -1,8 +1,7 @@
-.formWrapper {
+.projectListContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 50%;
-    margin: auto;
-    padding-top: 30vh;
+    align-items: center;
+    gap: 4px;
 }
