@@ -5,6 +5,7 @@ import {useGetProjects} from "entities/project/useGetProjects.ts";
 import {useAppDispatch} from "shared/hooks/redux.ts";
 import {setChosenProject} from "entities/project/ProjectSlice.ts";
 import {List} from "shared/ui/List.tsx";
+import {initTimer} from "entities/timer/TimerSlice.ts";
 
 export const ProjectsSideBar = () => {
 
@@ -37,6 +38,9 @@ export const ProjectsSideBar = () => {
                             className={classes.projectMiniCard}
                             onClick={() => {
                                 dispatch(setChosenProject(project));
+                                if (project.id == null) return;
+                                dispatch(initTimer(project.id));
+
                             }}
                         >{project.title}</Button>
                     )}/>

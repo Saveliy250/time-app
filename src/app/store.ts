@@ -1,10 +1,12 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {userReducer} from "../entities/user/UserSlice.ts";
 import {projectReducer} from "../entities/project/ProjectSlice.ts";
+import {timerReducer} from "entities/timer/TimerSlice.ts";
 
 const rootReducer = combineReducers({
     user: userReducer,
     project: projectReducer,
+    timer: timerReducer,
 })
 
 export const setUpStore = () => {
