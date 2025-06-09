@@ -5,9 +5,12 @@ import classes from "./AnalyticsPage.module.css";
 
 
 
+
 export function AnalyticsPage() {
 
     const {projects} = useGetProjects()
+    console.log(projects)
+
 
 
 

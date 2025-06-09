@@ -20,7 +20,8 @@ export const CreateProject = () => {
     const {isLoading, isError, error} = useAppSelector(state => state.project)
 
     const onSubmit: SubmitHandler<IProject> = async (data) => {
-        try{
+        try {
+            console.log(data)
             await dispatch(addProject(data)).unwrap()
         } catch {
             notifications.show({
@@ -46,6 +47,11 @@ export const CreateProject = () => {
                     label={'Описание'}
                     placeholder={'Введите описание проекта'}
                     {...register('description')}
+                />
+                <TextInput
+                    label={'время'}
+                    placeholder={'time'}
+                    {...register('timeToComplete')}
                 />
                 <Controller
                     name="tags"

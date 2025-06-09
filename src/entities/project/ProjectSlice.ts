@@ -25,11 +25,30 @@ export const addProject = createAsyncThunk<IProject, Omit<IProject, 'id'>>(
                     title: project.title,
                     description: project.description,
                     tags: project.tags,
+                    timeToComplete: project.timeToComplete,
+                    timeSpent: 0
                 }
             })
             return response.data;
         } catch {
             return thunkAPI.rejectWithValue('ошибка при создании проекта')
+        }
+    }
+)
+
+export const updateProjectTimeSpentById = createAsyncThunk<IProject, Pick<IProject, 'id' | 'timeSpent'>>(
+    'updateProject',
+    async (project, thunkAPI) => {
+        try {
+            const response = await projectRepository.updateProjectTimeSpentById({
+                params: {
+                    id: project.id,
+                    timeSpent: project.timeSpent
+                },
+            })
+            return response.data;
+        } catch {
+            return thunkAPI.rejectWithValue('ошибка пр  попытке обновить проект')
         }
     }
 )
@@ -56,6 +75,11 @@ export const projectSlice = createSlice({
     reducers: {
         setChosenProject: (state, action: PayloadAction<IProject>) => {
             state.chosenProject = action.payload;
+        },
+        setTimeSpent: (state, action: PayloadAction<number>) => {
+            if (state.chosenProject) {
+                state.chosenProject.timeSpent = action.payload;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -86,8 +110,21 @@ export const projectSlice = createSlice({
                 state.error =
                     typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
             })
+            .addCase(updateProjectTimeSpentById.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true
+                state.error =
+                    typeof action.payload === "string" ? action.payload : "Неизвестная ошибка";
+            })
+            .addCase(updateProjectTimeSpentById.fulfilled, (state, action) => {
+                state.isLoading = false
+                const proj = state.projects.find(p => p.id === action.payload.id)
+                if (!proj) {return}
+
+                proj.timeSpent = action.payload.timeSpent
+            })
     }
 })
 
-export const {setChosenProject} = projectSlice.actions;
+export const {setChosenProject, setTimeSpent} = projectSlice.actions;
 export const {reducer: projectReducer} = projectSlice
