@@ -12,7 +12,7 @@ export const ProjectSlide = ({projectId, timeSpentValue}: ProjectSlideProps) => 
 
     const {chosenProject} = useAppSelector(state => state.project);
 
-    const {timer, setIsRunning, isRunning} = useTimer(projectId, timeSpentValue);
+    const {timer, toggleTimer} = useTimer(projectId, timeSpentValue);
 
     return (
         <div style={{
@@ -23,7 +23,7 @@ export const ProjectSlide = ({projectId, timeSpentValue}: ProjectSlideProps) => 
                     <h2>{chosenProject?.title}</h2>
                     <p>{timer}</p>
                     <p>{chosenProject?.timeSpent}</p>
-                    <button onClick={() => setIsRunning(() => !isRunning)}></button>
+                    <button onClick={() => toggleTimer()}></button>
                     <div>{chosenProject?.description}</div>
                     <List data={chosenProject?.tags || []} renderData={(tag) =>
                         <Pill>{tag}</Pill>

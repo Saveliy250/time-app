@@ -1,42 +1,50 @@
 import {useEffect, useRef, useState} from "react";
-import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
+import {useAppDispatch} from "shared/hooks/redux.ts";
 import {updateProjectTimeSpentById} from "entities/project/ProjectSlice.ts";
 
 
 export const useTimer = (id: number, initTime: number) => {
 
     const [timer, setTimer] = useState(initTime)
-    const timeRef = useRef<number>(initTime);
+    const timeRef = useRef<NodeJS.Timeout>(undefined)
+    const timerValueRef = useRef(timer)
     const [isRunning, setIsRunning] = useState(false);
 
     const dispatch = useAppDispatch();
-    const {chosenProject} = useAppSelector(state => state.project);
 
-
+    const toggleTimer = () => setIsRunning((prev) => !prev);
 
     useEffect(() => {
-        if (!isRunning || !chosenProject?.id){return}
-        const timerId = setInterval(() => {
-            timeRef.current += 1
-            setTimer(timeRef.current)
-            }, 1000);
-        return () => {clearInterval(timerId);}
+        if (!isRunning || !id) {
+            return;
+        }
+        timeRef.current = setInterval(() => {
+            setTimer((prev) => prev + 1);
+        }, 1000);
+
+        return () => {
+            clearInterval(timeRef.current);
+        };
     }, [isRunning]);
 
 
 
     useEffect(() => {
         return () => {
-            if (timeRef.current > initTime) {
-                dispatch(updateProjectTimeSpentById({id: id, timeSpent: timeRef.current}))
-                timeRef.current = 0
-                setTimer(timeRef.current)
-            }}
-    }, [dispatch, id, initTime]);
+            console.log(timerValueRef.current);
+            const timerValue = timerValueRef.current;
+            if (timer > initTime) {
+                dispatch(updateProjectTimeSpentById({ id: id, timeSpent: timerValue}));
+                setTimer(0);
+            }
+
+            clearInterval(timeRef.current)
+        };
+    }, []);
 
     return {
         timer,
         isRunning,
-        setIsRunning,
+        toggleTimer,
     }
 }
