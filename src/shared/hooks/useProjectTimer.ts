@@ -1,14 +1,14 @@
-import {useEffect, useRef, useState} from "react";
-import {useAppDispatch} from "shared/hooks/redux.ts";
-import {updateProjectTimeSpentById} from "entities/project/ProjectSlice.ts";
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch } from "shared/hooks/redux.ts";
+import { updateProjectTimeSpentById } from "entities/project/ProjectSlice.ts";
 
-
-export const useTimer = (id: number, initTime: number) => {
-
-    const [timer, setTimer] = useState(initTime)
-    const timeRef = useRef<NodeJS.Timeout>(undefined)
-    const timerValueRef = useRef(timer)
+export const useProjectTimer = (id: number, initTime: number) => {
+    const [timer, setTimer] = useState(initTime);
     const [isRunning, setIsRunning] = useState(false);
+    const timeRef = useRef<NodeJS.Timeout>(undefined);
+    const timerValueRef = useRef(timer);
+
+    timerValueRef.current = timer;
 
     const dispatch = useAppDispatch();
 
@@ -27,18 +27,17 @@ export const useTimer = (id: number, initTime: number) => {
         };
     }, [isRunning]);
 
-
-
     useEffect(() => {
         return () => {
-            console.log(timerValueRef.current);
             const timerValue = timerValueRef.current;
-            if (timer > initTime) {
-                dispatch(updateProjectTimeSpentById({ id: id, timeSpent: timerValue}));
+
+
+            if (timerValue > initTime) {
+                dispatch(updateProjectTimeSpentById({ id: id, timeSpent: timerValue }));
                 setTimer(0);
             }
 
-            clearInterval(timeRef.current)
+            clearInterval(timeRef.current);
         };
     }, []);
 
@@ -46,5 +45,5 @@ export const useTimer = (id: number, initTime: number) => {
         timer,
         isRunning,
         toggleTimer,
-    }
-}
+    };
+};

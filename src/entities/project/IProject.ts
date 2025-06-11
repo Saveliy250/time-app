@@ -1,5 +1,5 @@
 export interface IProject {
-    id?: number;
+    id: number;
     title: string;
     description: string;
     tags: string[];
