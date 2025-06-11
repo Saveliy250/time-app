@@ -1,0 +1,28 @@
+.ProfileForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin: 5% auto;
+    padding-top: 200px;
+    padding-bottom: 200px;
+    color: white;
+}
+
+.ButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.LogoutButton {
+    background-color: #f44336;
+    width: 300px;
+    height: 80px;
+    margin-top: 40px;
+    border-radius: 30px;
+}

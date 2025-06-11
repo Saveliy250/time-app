@@ -21,7 +21,6 @@ export const CreateProject = () => {
 
     const onSubmit: SubmitHandler<IProject> = async (data) => {
         try {
-            console.log(data)
             await dispatch(addProject(data)).unwrap()
         } catch {
             notifications.show({
@@ -54,7 +53,7 @@ export const CreateProject = () => {
                     rules={{ min: { value: 0, message: "Должно быть неотрицательным" } }}
                     render={({ field }) => (
                         <NumberInput
-                            label="Время (минуты)"
+                            label="Время (секунды :))"
                             placeholder="Введите время на выполнение"
                             {...field}
                             onChange={(value) => field.onChange(value)}

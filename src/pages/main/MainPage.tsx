@@ -12,7 +12,7 @@ export const MainPage = () => {
     return (
         <>
             <ProjectsSideBar/>
-            {chosenProject && chosenProject.id ? <ProjectSlide key={chosenProject.id} projectId={chosenProject.id} timeSpentValue={chosenProject.timeSpent}/> : null}
+            {chosenProject  ? <ProjectSlide key={chosenProject.id} project={chosenProject}/> : null}
             <CreateProject/>
         </>
     );

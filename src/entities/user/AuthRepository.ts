@@ -10,6 +10,10 @@ class AuthRepository {
     loginUser({params, config} : AxiosRequestConfig<Pick<IUser, 'email' | 'password'>>) {
         return httpClient.post('/auth', params, config)
     }
+
+    updateUser({params, config}: AxiosRequestConfig<Omit<IUser, 'password'>>) {
+        return httpClient.patch(`/users/${params.id}`, params, config)
+    }
 }
 
 export const authRepository = new AuthRepository();

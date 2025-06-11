@@ -3,4 +3,5 @@ export const ROUTES = {
     REGISTRATION: '/register',
     MAIN: '/',
     ANALYTICS: '/analytics',
+    PROFILE: '/profile',
 }

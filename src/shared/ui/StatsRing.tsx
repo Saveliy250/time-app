@@ -14,12 +14,12 @@ interface RingProps {
     data: IRingData[]
 }
 
-export function StatsRing({data}: RingProps) {
+const icons = {
+    up: IconArrowUpRight,
+    down: IconArrowDownRight,
+};
 
-    const icons = {
-        up: IconArrowUpRight,
-        down: IconArrowDownRight,
-    };
+export function StatsRing({data}: RingProps) {
 
     const stats = data.map((stat) => {
         const Icon = icons[stat.icon];

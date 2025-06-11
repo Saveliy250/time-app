@@ -2,7 +2,7 @@ import {ProjectCard} from "pages/Analytics/components/ProjectCard.tsx";
 import {useGetProjects} from "entities/project/useGetProjects.ts";
 import {List} from "shared/ui/List.tsx";
 import classes from "./AnalyticsPage.module.css";
-import {Header} from "shared/ui/Header.tsx";
+import {Header} from "shared/ui/Header/Header.tsx";
 import {AppShell} from "@mantine/core";
 import {useProjectsAnalytics} from "shared/hooks/useProjectsAnalytics.ts";
 import {StatsRing} from "shared/ui/StatsRing.tsx";
