@@ -1,10 +1,18 @@
-import {AppShell, Pill} from "@mantine/core";
-import {useAppSelector} from "shared/hooks/redux.ts";
+import {AppShell, Button, Pill} from "@mantine/core";
 import {List} from "shared/ui/List.tsx";
+import {useProjectTimer} from "shared/hooks/useProjectTimer.ts";
+import {PauseIco} from "shared/ui/icons/PauseIco.tsx";
+import {PlayIco} from "shared/ui/icons/PlayIco.tsx";
+import type {IProject} from "entities/project/IProject.ts";
 
-export const ProjectSlide = () => {
+interface ProjectSlideProps {
+    project: IProject;
+}
 
-    const {chosenProject} = useAppSelector(state => state.project);
+export const ProjectSlide = ({project}: ProjectSlideProps) => {
+
+
+    const {toggleTimer, hours, minutes, seconds, isRunning} = useProjectTimer(project.id, project.timeSpent);
 
     return (
         <div style={{
@@ -12,9 +20,13 @@ export const ProjectSlide = () => {
         }}>
             <AppShell>
                 <AppShell.Main>
-                    <h2>{chosenProject?.title}</h2>
-                    <div>{chosenProject?.description}</div>
-                    <List data={chosenProject?.tags || []} renderData={(tag) =>
+                    <h2>{project.title}</h2>
+                    <p>{hours}:{minutes}:{seconds}</p>
+                    <Button onClick={() => toggleTimer()}>
+                        {isRunning ? <PauseIco/> : <PlayIco/>}
+                    </Button>
+                    <div>{project.description}</div>
+                    <List data={project.tags || []} renderData={(tag) =>
                         <Pill>{tag}</Pill>
                     }/>
                 </AppShell.Main>

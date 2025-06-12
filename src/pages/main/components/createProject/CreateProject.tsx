@@ -1,6 +1,6 @@
 import {Controller, type SubmitHandler, useForm} from "react-hook-form";
 import type {IProject} from "entities/project/IProject.ts";
-import {Button, TagsInput, TextInput} from "@mantine/core";
+import {Button, NumberInput, TagsInput, TextInput} from "@mantine/core";
 import classes from "./CreateProject.module.css";
 import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
 import {addProject} from "entities/project/ProjectSlice.ts";
@@ -20,7 +20,7 @@ export const CreateProject = () => {
     const {isLoading, isError, error} = useAppSelector(state => state.project)
 
     const onSubmit: SubmitHandler<IProject> = async (data) => {
-        try{
+        try {
             await dispatch(addProject(data)).unwrap()
         } catch {
             notifications.show({
@@ -46,6 +46,21 @@ export const CreateProject = () => {
                     label={'Описание'}
                     placeholder={'Введите описание проекта'}
                     {...register('description')}
+                />
+                <Controller
+                    name="timeToComplete"
+                    control={control}
+                    rules={{ min: { value: 0, message: "Должно быть неотрицательным" } }}
+                    render={({ field }) => (
+                        <NumberInput
+                            label="Время (секунды :))"
+                            placeholder="Введите время на выполнение"
+                            {...field}
+                            onChange={(value) => field.onChange(value)}
+                            onBlur={field.onBlur}
+                            min={0}
+                        />
+                    )}
                 />
                 <Controller
                     name="tags"

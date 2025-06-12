@@ -1,5 +1,5 @@
 import {AppShell, Button, Skeleton} from "@mantine/core";
-import {Header} from "shared/ui/Header.tsx";
+import {Header} from "shared/ui/Header/Header.tsx";
 import classes from "./ProjectsSideBar.module.css";
 import {useGetProjects} from "entities/project/useGetProjects.ts";
 import {useAppDispatch} from "shared/hooks/redux.ts";
@@ -37,6 +37,8 @@ export const ProjectsSideBar = () => {
                             className={classes.projectMiniCard}
                             onClick={() => {
                                 dispatch(setChosenProject(project));
+                                if (project.id == null) return;
+
                             }}
                         >{project.title}</Button>
                     )}/>

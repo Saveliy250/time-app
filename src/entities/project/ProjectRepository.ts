@@ -10,6 +10,10 @@ class ProjectRepository {
     postProject({params, config}: AxiosRequestConfig<Omit<IProject, 'id'>>){
         return httpClient.post('projects', params, config)
     }
+
+    updateProjectTimeSpentById({params, config}: AxiosRequestConfig<Pick<IProject, 'id' | 'timeSpent'>>){
+        return httpClient.patch(`projects/${params.id}`, {timeSpent: params.timeSpent}, config)
+    }
 }
 
 export const projectRepository = new ProjectRepository();

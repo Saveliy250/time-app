@@ -2,14 +2,16 @@ import {Button, TextInput} from "@mantine/core";
 import {type SubmitHandler, useForm} from "react-hook-form";
 import {useAppDispatch, useAppSelector} from "shared/hooks/redux.ts";
 import type {IUser} from "entities/user/IUser.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {registerUser} from "entities/user/UserSlice.ts";
 import {notifications} from "@mantine/notifications";
 import classes from "./Register.module.css";
+import {ROUTES} from "shared/routes.ts";
 
 export const Register = () => {
 
     const {register, handleSubmit} = useForm<IUser>()
+    const navigate = useNavigate();
 
     const dispatch = useAppDispatch()
     const { isLoading, error} = useAppSelector(state => state.user)
@@ -17,6 +19,7 @@ export const Register = () => {
     const onSubmit: SubmitHandler<IUser> = async (data) => {
         try {
             await dispatch(registerUser(data)).unwrap()
+            navigate(ROUTES.PROFILE)
         } catch {
             notifications.show({
                 color: 'red',
